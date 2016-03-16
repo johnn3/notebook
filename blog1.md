@@ -24,6 +24,10 @@ limited to that of simply installing ipython onto the 2014 CS50(Ubuntu) VM, but
 this does carry over into intalling the jupyter notebook with that of what was 
 directly from the forked repo:
 
+EDIT1: I'm adding this here that I did a whole lot in messing around with certain 
+file persmissions in the cs50 box ~~~especially with jharvard~~~. It generally
+made installation and running a whole lot easier for this.
+
 First and foremost, make sure that the CS50 2014 is up-to-date (this takes a while)
 
 ```
@@ -73,7 +77,8 @@ jupyter notebook
 ------
 
 UPDATE!: This is now labelled as a question in the jupyter/notebook issue
-          #1217
+#1217
+
 For my second artifact for this blog post I decided on testing the water
 with the notebook and a feature that always annoyed me with text areas
 (like this one) is the absence of a line character count. 

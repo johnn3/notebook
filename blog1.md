@@ -99,3 +99,9 @@ Also, on the matter of jupyter itself, it is a language "agnostic" conglomeratio
 This means that you don't have to solely know python to get things going ---but
 I will stick to it anyway when testing out the page (I have not touched the language
 since last summer and I am getting ansy with it)..
+
+UPDATE:
+That idea was shot down since there is an extension available that already implements
+this feature (and was thus dubbed a duplicate in issue #127 so pretty earlier on). 
+It was worded differently. This just means that I should look more into the issues for
+maybe bug fixing/testing or something else entirely.

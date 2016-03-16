@@ -77,7 +77,7 @@ jupyter notebook
 ------
 
 UPDATE!: This is now labelled as a question in the jupyter/notebook issue
-#1217
+no.1217
 
 For my second artifact for this blog post I decided on testing the water
 with the notebook and a feature that always annoyed me with text areas

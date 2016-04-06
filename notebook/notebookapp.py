@@ -137,16 +137,6 @@ def load_handlers(name):
     mod = __import__(name, fromlist=['default_handlers'])
     return mod.default_handlers
 
-
-class DeprecationHandler(IPythonHandler):
-    def get(self, url_path):
-        self.set_header("Content-Type", 'text/javascript')
-        self.finish("""
-            console.warn('`/static/widgets/js` is deprecated.  Use `nbextensions/widgets/widgets/js` instead.');
-            define(['%s'], function(x) { return x; });
-        """ % url_path_join('nbextensions', 'widgets', 'widgets', url_path.rstrip('.js')))
-        self.log.warning('Deprecated widget Javascript path /static/widgets/js/*.js was used')
-
 #-----------------------------------------------------------------------------
 # The Tornado web application
 #-----------------------------------------------------------------------------
@@ -227,7 +217,7 @@ class NotebookWebApplication(web.Application):
             iopub_msg_rate_limit=ipython_app.iopub_msg_rate_limit,
             iopub_data_rate_limit=ipython_app.iopub_data_rate_limit,
             rate_limit_window=ipython_app.rate_limit_window,
-
+            
             # authentication
             cookie_secret=ipython_app.cookie_secret,
             login_url=url_path_join(base_url,'/login'),
@@ -262,7 +252,6 @@ class NotebookWebApplication(web.Application):
         
         # Order matters. The first handler to match the URL will handle the request.
         handlers = []
-        handlers.append((r'/deprecatedwidgets/(.*)', DeprecationHandler))
         handlers.extend(load_handlers('tree.handlers'))
         handlers.extend([(r"/login", settings['login_handler_class'])])
         handlers.extend([(r"/logout", settings['logout_handler_class'])])
@@ -282,21 +271,21 @@ class NotebookWebApplication(web.Application):
         handlers.extend(load_handlers('lab.handlers'))
         
         # BEGIN HARDCODED WIDGETS HACK
+        # TODO: Remove on notebook 5.0
         widgets = None
         try:
-            import widgetsnbextension as widgets
+            import widgetsnbextension
         except:
             try:
                 import ipywidgets as widgets
+                handlers.append(
+                    (r"/nbextensions/widgets/(.*)", FileFindHandler, {
+                        'path': widgets.find_static_assets(),
+                        'no_cache_paths': ['/'], # don't cache anything in nbextensions
+                    }),
+                )
             except:
                 app_log.warning('Widgets are unavailable. Please install widgetsnbextension or ipywidgets 4.0')
-        if widgets is not None:
-            handlers.append(
-                (r"/nbextensions/widgets/(.*)", FileFindHandler, {
-                    'path': widgets.find_static_assets(),
-                    'no_cache_paths': ['/'], # don't cache anything in nbextensions
-                }),
-            )
         # END HARDCODED WIDGETS HACK
         
         handlers.append(
@@ -617,6 +606,10 @@ class NotebookApp(JupyterApp):
             help="Supply overrides for the tornado.web.Application that the "
                  "Jupyter notebook uses.")
     
+    cookie_options = Dict(config=True,
+        help="Extra keyword arguments to pass to `set_secure_cookie`."
+             " See tornado's set_secure_cookie docs for details."
+    )
     ssl_options = Dict(config=True,
             help="""Supply SSL options for the tornado HTTPServer.
             See the tornado docs for details.""")
@@ -845,9 +838,18 @@ class NotebookApp(JupyterApp):
         self.config.FileContentsManager.root_dir = new
         self.config.MappingKernelManager.root_dir = new
 
+    # TODO: Remove me in notebook 5.0
     server_extensions = List(Unicode(), config=True,
-        help=("Python modules to load as notebook server extensions. "
-              "This is an experimental API, and may change in future releases.")
+        help=("DEPRECATED use the nbserver_extensions dict instead")
+    )
+    def _server_extensions_changed(self, name, old, new):
+        self.log.warning("server_extensions is deprecated, use nbserver_extensions")
+        self.server_extensions = new
+        
+    nbserver_extensions = Dict({}, config=True,
+        help=("Dict of Python modules to load as notebook server extensions."
+              "Entry values can be used to enable and disable the loading of"
+              "the extensions.")
     )
 
     reraise_server_extension_failures = Bool(
@@ -934,6 +936,7 @@ class NotebookApp(JupyterApp):
         if self.allow_origin_pat:
             self.tornado_settings['allow_origin_pat'] = re.compile(self.allow_origin_pat)
         self.tornado_settings['allow_credentials'] = self.allow_credentials
+        self.tornado_settings['cookie_options'] = self.cookie_options
         # ensure default_url starts with base_url
         if not self.default_url.startswith(self.base_url):
             self.default_url = url_path_join(self.base_url, self.default_url)
@@ -1092,17 +1095,26 @@ class NotebookApp(JupyterApp):
         
         The extension API is experimental, and may change in future releases.
         """
+        
+        # TODO: Remove me in notebook 5.0
         for modulename in self.server_extensions:
-            try:
-                mod = importlib.import_module(modulename)
-                func = getattr(mod, 'load_jupyter_server_extension', None)
-                if func is not None:
-                    func(self)
-            except Exception:
-                if self.reraise_server_extension_failures:
-                    raise
-                self.log.warning("Error loading server extension %s", modulename,
-                              exc_info=True)
+            # Don't override disable state of the extension if it already exist
+            # in the new traitlet
+            if not modulename in self.nbserver_extensions:
+                self.nbserver_extensions[modulename] = True
+        
+        for modulename in self.nbserver_extensions:
+            if self.nbserver_extensions[modulename]:
+                try:
+                    mod = importlib.import_module(modulename)
+                    func = getattr(mod, 'load_jupyter_server_extension', None)
+                    if func is not None:
+                        func(self)
+                except Exception:
+                    if self.reraise_server_extension_failures:
+                        raise
+                    self.log.warning("Error loading server extension %s", modulename,
+                                  exc_info=True)
     
     @catch_config_error
     def initialize(self, argv=None):

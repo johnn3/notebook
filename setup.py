@@ -155,9 +155,8 @@ install_requires = [
 ]
 extras_require = {
     ':sys_platform != "win32"': ['terminado>=0.3.3'],
-    'doc': ['Sphinx>=1.1'],
     'test:python_version == "2.7"': ['mock'],
-    'test': ['nose', 'requests', 'nose_warnings_filters'],
+    'test': ['nose', 'coverage', 'requests', 'nose_warnings_filters'],
 }
 
 if 'setuptools' in sys.modules:
@@ -182,6 +181,7 @@ if 'setuptools' in sys.modules:
         'console_scripts': [
             'jupyter-notebook = notebook.notebookapp:main',
             'jupyter-nbextension = notebook.nbextensions:main',
+            'jupyter-serverextension = notebook.serverextensions:main',
         ]
     }
     setup_args.pop('scripts', None)

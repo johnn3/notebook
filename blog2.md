@@ -32,5 +32,48 @@ data. Pretty straight forward. We need this line in order to aquire it on the CS
 ```
 sudo pip install pandas ipython[all] jupyter
 ```
+Next, after launching the jupyter notebook, keep your .csv file in an accessible location 
+that your project can access.
 
+The example here shows that I am using the file HealtDatCleaned.csv as the guinea pig.
 
+![Alt text](/path/to/img.jpg)
+![Alt text](/path/to/img.jpg "Optional title")
+
+Now let's actually load in the .csv!
+
+Unless there is already an ipython notebook already that you would like to add to,
+add the line
+
+```
+import pandas
+```
+
+at the top of the notebook's first few lines (where you would typically put imports), this
+should work since we have already installed the pandas library as mentioned previously. 
+
+Next, we want to actually load our csv data, we can do this with this particular line here
+inside the same cell that we have imported pandas into:
+
+```
+CSV = pandas.read_csv('HealtDatCleaned.csv', sep',')
+```
+And as illustrated here:
+
+![Alt text](/path/to/img.jpg)
+
+A thing to note here is that you must know what the seperator symbol is here for you your data
+as CSVs can have different ones depending on what program you've saved the data to csv in, like
+';', or ':' or even ','. In this example, the seperator is ','. 
+
+And finally, on the next line:
+
+```
+CSV
+```
+
+Run the cell code and you should get a perfectly tabulated form of your data!
+
+![Alt text](/path/to/img.jpg)
+
+Note that there are also '...' since this table has 7488 rows of data with 26 columns of dimensions.

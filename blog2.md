@@ -37,8 +37,7 @@ that your project can access.
 
 The example here shows that I am using the file HealtDatCleaned.csv as the guinea pig.
 
-![Alt text](/path/to/img.jpg)
-![Alt text](/path/to/img.jpg "Optional title")
+![Alt text](/blog2-1.png)
 
 Now let's actually load in the .csv!
 
@@ -60,7 +59,7 @@ CSV = pandas.read_csv('HealtDatCleaned.csv', sep',')
 ```
 And as illustrated here:
 
-![Alt text](/path/to/img.jpg)
+![Alt text](/blog2-2.png)
 
 A thing to note here is that you must know what the seperator symbol is here for you your data
 as CSVs can have different ones depending on what program you've saved the data to csv in, like
@@ -74,6 +73,6 @@ CSV
 
 Run the cell code and you should get a perfectly tabulated form of your data!
 
-![Alt text](/path/to/img.jpg)
+![Alt text](/blog2-3.png)
 
 Note that there are also '...' since this table has 7488 rows of data with 26 columns of dimensions.

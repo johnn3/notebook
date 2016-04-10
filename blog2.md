@@ -17,7 +17,7 @@ from the back and forth that a typical undergrad would go through in making
 reports for labs, research or whatever data detailing necessary. Another is 
 that it can be interactive for the viewers of a paper when published.
 
-##Attempt: Making a table of csv data
+##Attempt: Making a table of csv data / ARTIFACT# 1
 -------------------
 
 Over the course of this semester, I needed a data set in order to actually 
@@ -77,3 +77,7 @@ Run the cell code and you should get a perfectly tabulated form of your data!
 ![Alt text](blog2-3.PNG)
 
 Note that there are also '...' since this table has 7488 rows of data with 26 columns of dimensions.
+
+NOTE: This is just a snippet of what one can do in the jupyter environment, all in all this was primarily
+a demonstration of what can be achieved with simple python, but ultimatly, the visual aspect is what I am
+trying to promote.

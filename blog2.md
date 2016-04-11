@@ -103,21 +103,14 @@ A quick breakdown of the points of emphasis for the article and particularsL
 +   Code is very fragmented - because you do not have to compile each cell in order from top to bottom, which can cause issues when you are referring to In[57] when you happen to call it on In[23]
 +   The output is very incomplete - R specific scripting
 +   Potential security risks
-+   Limitations(?) on making shiny applications
++   Limitations on making shiny applications
 
-Essentially, Kirill had a hard time with using R in jupyter for the most part and some presentation of the notebook.
+Essentially, Kirill had a hard time with using R in jupyter for the most part with some presentation of the notebook. Most of the points raised were quite valid in my opinion; there was a particular point about the code being fragmented is quite a legitimate concern. While I was tinkering away with the python code, it was apparent that each cell had to be executed seperately and reference to variable in other cells was indeed in an unordered fashion for some strange reason. Another thing that I should mention, is that I had never used R, so I could not really relate to the output being incomplete, but the other points I did not have enough reference to have a solid opinion of - version control for instance because none of my attempted applications where not too big. The potential security risk was something that was also more beyond my scope; I had only run jupyter on the localhost setting so there was not really any concern (unless my machine was comprimised already). Traceability is somewhat taken care of with jupyter because the log, when executing the jupyter notebook in the terminal, does keep track of cell activity to some extent but Kirill must be looking into something much more specific with actual string modifications.
 
-All in all I do agree with some points/observations that the author (Kirill Pomogajko) makes. The particular point about
-the code being fragmented is quite a legitimate concern. While I was tinkering away with the python code, it was apparent to be that each cell had to be executed seperately and reference to variable in other cells was indeed, possible. Another thing, I had never used
-R, so I could not really relate to the output being incomplete, but the other points I either found overtly nit-picky or
-I did not have enough reference to have a solid opinion of (messes with version control). The potential security risk was
-something that was also more beyond my scope; I had only run jupyter on the localhost setting so there was not really any 
-concern (unless my machine was comprimised already). 
-
-Now there was a suprising note of the comments for this article:
+Now there was a suprise in the comments for this article:
 
 ![Alt text](blog2-5.PNG)
 
-An actual core developer commented! On the jupyter/notbook repo, he goes by the handle of ellisonbg and is seen quite often
-on issues and PR with lots of contributions to refer to. He had quite a bit of clear of for the points that Kirill mentions 
-(and took it as good constructive critisism). 
+An actual Jupyter core developer commented! Within the jupyter/notbook repo, he goes by the handle of ellisonbg and is seen quite often commenting on issues and PR (core dev status indeed). The first point on version control was in agreement to which he referred to an ipython extension. Code chunks was deemed an issue of general workflow for the author of the notebook (so not much could be done in gneral for that). The incomplete output with R could have been a bug so there was a link to the Ikernel. The security concern was refered to ipython/jupyter documentation for actual configuration and a github repo to report on possible issues. Finally, making the notebook "shiny" was pointed to be an ongoing issue being addressed with other users trying to make Jupyter look good.
+
+Brian (core dev) welcomed the idea of the feedback and the general takeaway that I got from reviewing this article was that critical feedback is always essential when dealing with projects, not matter what the scale. Although some points may appear trivial from the initial standpoint, it can indeed become a larger issue later on. The whole process is somewhat akin to how testing is but less in a coding sense. It also reflect on what the EPL project for CMPT395 was like with feedback since is always room for improvement and keeping an open mindset about that is a good thing to have.
